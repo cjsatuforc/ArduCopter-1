@@ -16,18 +16,19 @@ class IMU {
 
 int XaValue, YaValue, ZaValue;
 int XgValue, YgValue, ZgValue;
+uint8_t slaveAddress;
 
 public:
 
-IMU();
+IMU(uint8_t slave_addr);
 
-void MPUInit(uint8_t slave_addr, uint8_t* reg_addrs, uint8_t* initialValues);
-void readAccelData(uint8_t slave_addr, uint8_t reg_start_addr);
-void readGyroData(uint8_t slave_addr, uint8_t reg_start_addr);
-void writeMPUData(uint8_t slave_addr, uint8_t reg_addr, int value);
+void IMUInit(uint8_t* reg_addrs, uint8_t* initialValues);
+void readAccelData(uint8_t reg_start_addr);
+void readGyroData(uint8_t reg_start_addr);
+void writeIMUData(uint8_t reg_addr, int value);
 int* getGyroValues(int* gyroValues);
 int* getAccelValues(int* accelValues);
-void calibrateIMU();
+void calibrateIMU(uint8_t gyroOffsetStartAddress, uint8_t accelOffsetStartAddress);
 };
 
 
