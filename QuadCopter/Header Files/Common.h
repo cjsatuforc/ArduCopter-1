@@ -72,6 +72,10 @@
 #define INTEGRAL_VALUE 1
 #define DERIVATIVE_VALUE 2
 
+//defining PID Limits
+#define UPPER_PID_CENTER_LIMIT 1508
+#define LOWER_PID_CENTER_LIMIT 1492
+
 //defining the number of rc receiver channels
 #define NUM_CHANNELS 4
 
@@ -89,6 +93,14 @@
 #define RECEIVER_ENDPOINTS_CALIBRATION "Please entend all sticks to their extremes and then back to the center"
 #define CALIBRATION_START_MESSAGE "Starting calibration now..."
 
+
+//defining receiver channels
+#define ROLL_CHANNEL 1
+#define PITCH_CHANNEL 2
+#define THROTTLE_CHANNEL 3
+#define YAW_CHANNEL 4
+
+
 //defining the number of calibration values used for IMU
 #define ACCEL_CALIBRATION_READINGS 2000
 #define GYRO_CALIBRATION_READINGS  2000
@@ -105,6 +117,7 @@
 #define ESC_PULSE_PERIOD 4000
 #define ALL_ESC_ENABLED
 #define ALL_ESC_DISABLE 
+#define ESC_CENTER_VALUE 1500
 
 // defining battery level constants
 #define MAX_BATTERY_VOLTAGE 1240

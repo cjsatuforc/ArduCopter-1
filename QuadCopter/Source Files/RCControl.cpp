@@ -3,7 +3,7 @@
 #include "Common.h"
 #include "SerialLogger.h"
 
-//declaring file local variables and static function prototypes
+//declaring static file variables and static function prototypes
 
 static int receiverInput[NUM_CHANNELS];
 static int receiverCenterValues[NUM_CHANNELS];
@@ -48,19 +48,18 @@ int convertReceiverInput(int channel) {
   //First we declare some local variables
   int actual, difference;
 
-
   actual = receiverInput[channel - 1];
   if (actual < receiverCenterValues[channel - 1]) {     //The actual receiver value is lower than the center value
     if (actual < receiverLowValues[channel - 1])actual = receiverLowValues[channel - 1];
     difference = ((long)(receiverCenterValues[channel - 1] - actual) * (long)500) / (receiverCenterValues[channel - 1] - receiverLowValues[channel - 1]);
-    return 1500 - difference;
+    return ESC_CENTER_VALUE - difference;
   }
   else if (actual > receiverCenterValues[channel - 1]) {
     if (actual > receiverHighValues[channel - 1])actual = receiverHighValues[channel - 1];
     difference = ((long)(actual - receiverCenterValues[channel - 1]) * (long)500) / (receiverHighValues[channel - 1] - receiverCenterValues[channel - 1]);
-    return 1500 + difference;
+    return ESC_CENTER_VALUE + difference;
   }
-  return 1500;
+  return ESC_CENTER_VALUE;
 }
 
 ISR(PCINT0_vect) {

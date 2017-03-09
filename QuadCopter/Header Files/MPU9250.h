@@ -17,11 +17,18 @@ class IMU {
 int XaValue, YaValue, ZaValue;
 int XgValue, YgValue, ZgValue;
 uint8_t slaveAddress;
+float pitchAngle, rollAngle, yawAngle;
+float gyroMagnitude, accelMagnitude;
+
+void calculateAccelMagnitude();
+void calculateGyroMagnitude();
+void calculateAngleDeviations();
 
 public:
 
 IMU(uint8_t slave_addr);
 
+float* getAngleAdjustments();
 void IMUInit(uint8_t* reg_addrs, uint8_t* initialValues);
 void readAccelData(uint8_t reg_start_addr);
 void readGyroData(uint8_t reg_start_addr);

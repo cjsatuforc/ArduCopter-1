@@ -51,13 +51,13 @@ void IMU::writeIMUData(uint8_t reg_addr, int value) {
 }
 
 // getting acceleromter and gyro values from IMU
-int* IMU::getGyroValues(int* gyroValues) {
+void IMU::getGyroValues(int* gyroValues) {
 
   gyroValues[ROLL_VALUE] = XgValue;
   gyroValues[PITCH_VALUE] = YgValue;
   gyroValues[YAW_VALUE] = ZgValue;
 }
-int* IMU::getAccelValues(int* accelValues) {
+void IMU::getAccelValues(int* accelValues) {
 
   accelValues[ROLL_VALUE] = XaValue;
   accelValues[PITCH_VALUE] = YaValue;
@@ -87,4 +87,40 @@ void IMU::calibrateIMU(uint8_t gyroOffsetStartAddress, uint8_t accelOffsetStartA
     writeIMUData(i + GYRO_X_OFFSET_H, highByteOffset);
     writeIMUData(i + 1 + GYRO_X_OFFSET_H, lowByteOffset);
   }
+}
+
+void IMU::calculateAccelMagnitude() {
+	
+	accelMagnitude = sqrt((XaValue*XaValue) + (YaValue*YaValue) + (ZaValue*ZaValue));
+	
+}
+
+void IMU::calculateGyroMagnitude() {
+	
+	gyroMagnitude = sqrt((XgValue*XgValue) + (YgValue*YgValue) + (ZgValue*ZgValue));
+}
+
+void IMU::calculateAngleDeviations() {
+	
+	float accelAnglePitch = asin((float)YaValue/accelMagnitude) * RAD_TO_DEG_CONVERSION;
+	float accelAngleRoll =  asin((float)XaValue/accelMagnitude) * -RAD_TO_DEG_CONVERSION
+	
+	pitchAngle += YgValue*(ESC_PULSE_PERIOD/1000000); // calculate travelled pitch and roll and add this to the pitch and roll angle variables.
+	rollAngle +=  XgValue*(ESC_PULSE_PERIOD/1000000); // ESC_PULSE_PERIOD is devided by 10^6 to convert it from microseconds to seconds
+	
+	//sin takes in radian values so convert from degrees to radians 
+	pitchAngle-= rollAngle* sin(ZgValue * (PI/180) * ESC_PULSE_PERIOD/1000000); //If the IMU has yawed transfer the roll angle to the pitch angle.
+	rollAngle+= pitchAngle* sin(ZgValue * (PI/180) * ESC_PULSE_PERIOD/1000000); //If the IMU has yawed transfer the pitch angle to the roll angle
+	
+	// perform gyro drift correction by using a complimetary filter 
+	
+	pitchAngle = pitchAngle*0.9996 + accelAnglePitch*0.0004;  
+  	rollAngle = rollAngle*0.9996 + accelAngleRoll*0.0004; 
+  	 
+}
+
+float* IMU::getAngleAdjustments() {
+	
+	float angleAdjustments[2] = {rollAngle, pitchAngle};
+	return angleAdjustments;
 }

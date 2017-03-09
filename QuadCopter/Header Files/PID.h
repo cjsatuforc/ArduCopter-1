@@ -10,7 +10,7 @@
 
 #include "MPU9250.h"
 
-void calculatePID(float* pidRoll, float* pidPitch, float* pidYaw, IMU& gyroValues);
+void calculatePIDOutput(float* pidRoll, float* pidPitch, float* pidYaw, IMU& gyroValues);
 void setPIDValues(float* pValues, float* iValues, float* dValues);
 
 #endif /* PID_H_ */
