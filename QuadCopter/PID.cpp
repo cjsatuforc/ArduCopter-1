@@ -45,6 +45,3 @@ void setPIDValues(const float* pValues, const float* iValues, const float* dValu
     pidValues[i][2] = dValues[i];
   }
 }
-
-
-

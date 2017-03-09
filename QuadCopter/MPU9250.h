@@ -24,9 +24,10 @@ IMU();
 void MPUInit(uint8_t slave_addr, uint8_t* reg_addrs, uint8_t* initialValues);
 void readAccelData(uint8_t slave_addr, uint8_t reg_start_addr);
 void readGyroData(uint8_t slave_addr, uint8_t reg_start_addr);
-void writeMPUDATA(uint8_t slave_addr, uint8_t reg_addr, int value);
+void writeMPUData(uint8_t slave_addr, uint8_t reg_addr, int value);
 int* getGyroValues(int* gyroValues);
 int* getAccelValues(int* accelValues);
+void calibrateIMU();
 };
 
 

@@ -42,7 +42,7 @@ void IMU::readGyroData(uint8_t slave_addr, uint8_t reg_start_addr) {
 }
 
 // wrapper function for writing values to MPU registers
-void IMU::writeMPUDATA(uint8_t slave_addr, uint8_t reg_addr, int value) {
+void IMU::writeMPUData(uint8_t slave_addr, uint8_t reg_addr, int value) {
   
   i2c_writeTo(slave_addr,reg_addr,value);
 }
@@ -58,5 +58,29 @@ int* IMU::getAccelValues(int* accelValues) {
   accelValues[ROLL_VALUE] = XaValue;
   accelValues[PITCH_VALUE] = YaValue;
   accelValues[YAW_VALUE] = ZaValue;
+}
+
+void IMU::calibrateIMU() {
+
+// TODO if needed: perform accelerometer calibration first
+  for(int i = 0; i < ACCEL_CALIBRATION_READINGS; i++) {
+    
+  }
+  
+// next perform gyro calibration
+  int gyroOffset[3] = {0};
+  for(int i = 0; i < GYRO_CALIBRATION_READINGS; i++) {
+    readGyroData(IMU_SLAVE_ADDRESS, GYRO_XOUT_H);
+    gyroOffset[0]+= XgValue;
+    gyroOffset[1]+= YgValue;
+    gyroOffset[2]+= ZgValue;
+  }
+  for(int i = 0; i < 3; i++) {
+    gyroOffset[i] /= GYRO_CALIBRATION_READINGS;
+    int highByteOffset = (gyroOffset[i] >> 8) & 0xFF;
+    int lowByteOffset = gyroOffset[i] & 0xFF;
+    writeMPUData(IMU_SLAVE_ADDRESS, i+GYRO_X_OFFSET_H, highByteOffset);
+    writeMPUData(IMU_SLAVE_ADDRESS, i+1+GYRO_X_OFFSET_H, lowByteOffset);
+  }
 }
 
