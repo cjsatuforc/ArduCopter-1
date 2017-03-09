@@ -22,6 +22,7 @@ void IMU::IMUInit(uint8_t* reg_addrs, uint8_t* initialValues) {
     i2c_writeTo(slaveAddress, reg_addrs[i], initialValues[i]);
   }
 }
+
 //reading Accelerometer data from MPU
 void IMU::readAccelData(uint8_t reg_start_addr) {
 
@@ -49,6 +50,7 @@ void IMU::writeIMUData(uint8_t reg_addr, int value) {
   i2c_writeTo(slaveAddress, reg_addr, value);
 }
 
+// getting acceleromter and gyro values from IMU
 int* IMU::getGyroValues(int* gyroValues) {
 
   gyroValues[ROLL_VALUE] = XgValue;
@@ -62,6 +64,7 @@ int* IMU::getAccelValues(int* accelValues) {
   accelValues[YAW_VALUE] = ZaValue;
 }
 
+// calculate calibration values and store offsets in IMU
 void IMU::calibrateIMU(uint8_t gyroOffsetStartAddress, uint8_t accelOffsetStartAddress) {
 
   // TODO if needed: perform accelerometer calibration first

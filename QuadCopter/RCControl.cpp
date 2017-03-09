@@ -50,14 +50,14 @@ int convertReceiverInput(int channel) {
 
 
   actual = receiverInput[channel - 1];
-  if (actual < receiverCenterValues[channel - 1]) {                                                      //The actual receiver value is lower than the center value
-    if (actual < receiverLowValues[channel - 1])actual = receiverLowValues[channel - 1];                                           //Limit the lowest value to the value that was detected during setup
-    difference = ((long)(receiverCenterValues[channel - 1] - actual) * (long)500) / (receiverCenterValues[channel - 1] - receiverLowValues[channel - 1]);   //Calculate and scale the actual value to a 1000 - 2000us value
+  if (actual < receiverCenterValues[channel - 1]) {     //The actual receiver value is lower than the center value
+    if (actual < receiverLowValues[channel - 1])actual = receiverLowValues[channel - 1];
+    difference = ((long)(receiverCenterValues[channel - 1] - actual) * (long)500) / (receiverCenterValues[channel - 1] - receiverLowValues[channel - 1]);
     return 1500 - difference;
   }
-  else if (actual > receiverCenterValues[channel - 1]) {                                                                    //The actual receiver value is higher than the center value
-    if (actual > receiverHighValues[channel - 1])actual = receiverHighValues[channel - 1];                                       //Limit the lowest value to the value that was detected during setup
-    difference = ((long)(actual - receiverCenterValues[channel - 1]) * (long)500) / (receiverHighValues[channel - 1] - receiverCenterValues[channel - 1]); //Calculate and scale the actual value to a 1000 - 2000us value
+  else if (actual > receiverCenterValues[channel - 1]) {
+    if (actual > receiverHighValues[channel - 1])actual = receiverHighValues[channel - 1];
+    difference = ((long)(actual - receiverCenterValues[channel - 1]) * (long)500) / (receiverHighValues[channel - 1] - receiverCenterValues[channel - 1]);
     return 1500 + difference;
   }
   return 1500;
@@ -114,6 +114,7 @@ ISR(PCINT0_vect) {
     receiverInput[3] = current_time - timer_4;                //Channel 4 is current_time - timer_4
   }
 }
+
 static byte checkForSticksCentered() {
 
   byte center = 0;

@@ -32,3 +32,8 @@ void SerialLogger::logToConsole(const char* logString) {
   }
 }
 
+void SerialLogger::deleteInstance() {
+
+  delete instance;
+}
+

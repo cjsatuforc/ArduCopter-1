@@ -35,7 +35,7 @@ void calculatePID(float* pidRoll, float* pidPitch, float* pidYaw, float* pidSetP
   *pidRoll = (pidValues[YAW_VALUE][PROP_VALUE] * yawError) + pidITotal[YAW_VALUE] + (pidValues[YAW_VALUE][DERIVATIVE_VALUE] * (yawError - lastYawError));
 }
 
-
+// set the pid gains
 void setPIDValues(const float* pValues, const float* iValues, const float* dValues){
 
   for(int i = 0; i < 3; i++) {

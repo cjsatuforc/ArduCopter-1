@@ -81,6 +81,9 @@
 //defining the all sticks centered max limit for RCControl.cpp
 #define STICKS_CENTERED_LIMIT 15
 
+//defining maximum throttle value
+#define MAX_THROTTLE 1800
+
 // defining calibration strings to be used
 #define RECEIVER_CENTER_CALIBRATION "Please place all subtrims and sticks in the center position"
 #define RECEIVER_ENDPOINTS_CALIBRATION "Please entend all sticks to their extremes and then back to the center"
@@ -89,6 +92,24 @@
 //defining the number of calibration values used for IMU
 #define ACCEL_CALIBRATION_READINGS 2000
 #define GYRO_CALIBRATION_READINGS  2000
+
+// defining ESC constants
+#define NUM_ESC 4
+#define ESC_FRONT_RIGHT 0
+#define ESC_FRONT_LEFT 1
+#define ESC_REAR_RIGHT 2
+#define ESC_REAR_LEFT 3
+#define MAX_ESC_PULSE 2000
+#define ESC_MOTORS_ON_PULSE 1200
+#define ESC_MOTORS_OFF_PULSE 1000
+#define ESC_PULSE_PERIOD 4000
+#define ALL_ESC_ENABLED
+#define ALL_ESC_DISABLE 
+
+// defining battery level constants
+#define MAX_BATTERY_VOLTAGE 1240
+#define MIN_BATTERY_VOLTAGE 800
+
 #include <stdint.h>
 
 // the size of array is based on the number of addresses written to in initialization, i.e, section 2 in this file

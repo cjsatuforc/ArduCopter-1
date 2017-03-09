@@ -1,5 +1,4 @@
 
-
 #ifndef SerialLogger_H_
 #define SerialLogger_H_
 
@@ -17,6 +16,7 @@ class SerialLogger {
     void enable();
     void disable();
     void logToConsole(const char* logString);
+    static void deleteInstance();
 };
 
 #endif // SerialLogger_H_
