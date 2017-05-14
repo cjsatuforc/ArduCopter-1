@@ -85,7 +85,7 @@ void IMU::calibrateIMU(uint8_t gyroOffsetStartAddress, uint8_t accelOffsetStartA
     int highByteOffset = (gyroOffset[i] >> 8) & 0xFF;
     int lowByteOffset = gyroOffset[i] & 0xFF;
     writeIMUData(i + GYRO_X_OFFSET_H, highByteOffset);
-    writeIMUData(i + 1 + GYRO_X_OFFSET_H, lowByteOffset);
+    writeIMUData(i + GYRO_X_OFFSET_L, lowByteOffset);
   }
 }
 
