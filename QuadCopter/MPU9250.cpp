@@ -1,5 +1,6 @@
 #include "MPU9250.h"
-
+#include "Arduino.h"
+#include "Common.h"
 
 #define BUFFER_SIZE 6 // number of bytes to capture for each sensor
 
@@ -15,7 +16,7 @@ IMU::IMU(uint8_t slave_addr) {
 }
 
 //Initialize the motion processing unit by setting the appropriate registers
-void IMU::IMUInit(uint8_t* reg_addrs, uint8_t* initialValues) {
+void IMU::IMUInit(const uint8_t* reg_addrs, const uint8_t* initialValues) {
 
   for (int i = 0; i < sizeof(initialValues) - 1; i++) {
 
@@ -67,9 +68,13 @@ void IMU::getAccelValues(int* accelValues) {
 // calculate calibration values and store offsets in IMU
 void IMU::calibrateIMU(uint8_t gyroOffsetStartAddress, uint8_t accelOffsetStartAddress) {
 
+  int accelOffset[3] = {0};
   // TODO if needed: perform accelerometer calibration first
   for (int i = 0; i < ACCEL_CALIBRATION_READINGS; i++) {
-
+      readAccelData(accelOffsetStartAddress);
+      accelOffset[0] += XaValue;
+      accelOffset[1] += YaValue;
+      accelOffset[2] += ZaValue;
   }
 
   // next perform gyro calibration
@@ -82,10 +87,15 @@ void IMU::calibrateIMU(uint8_t gyroOffsetStartAddress, uint8_t accelOffsetStartA
   }
   for (int i = 0; i < 3; i++) {
     gyroOffset[i] /= GYRO_CALIBRATION_READINGS;
-    int highByteOffset = (gyroOffset[i] >> 8) & 0xFF;
-    int lowByteOffset = gyroOffset[i] & 0xFF;
-    writeIMUData(i + GYRO_X_OFFSET_H, highByteOffset);
-    writeIMUData(i + 1 + GYRO_X_OFFSET_H, lowByteOffset);
+    accelOffset[i] /= ACCEL_CALIBRATION_READINGS;
+    int highByteOffsetGyro = (gyroOffset[i] >> 8) & 0xFF;
+    int lowByteOffsetGyro = gyroOffset[i] & 0xFF;
+    int highByteOffsetAccel = (accelOffset[i] >> 8) & 0xFF;
+    int lowByteOffsetAccel = accelOffset[i] & 0xFF;
+    writeIMUData(i + GYRO_X_OFFSET_H, highByteOffsetGyro);
+    writeIMUData(i + 1 + GYRO_X_OFFSET_H, lowByteOffsetGyro);
+    writeIMUData(i + ACCEL_X_OFFSET_H, highByteOffsetAccel);
+    writeIMUData(i + 1 + ACCEL_X_OFFSET_H, lowByteOffsetAccel);
   }
 }
 
@@ -103,7 +113,7 @@ void IMU::calculateGyroMagnitude() {
 void IMU::calculateAngleDeviations() {
 	
 	float accelAnglePitch = asin((float)YaValue/accelMagnitude) * RAD_TO_DEG_CONVERSION;
-	float accelAngleRoll =  asin((float)XaValue/accelMagnitude) * -RAD_TO_DEG_CONVERSION
+	float accelAngleRoll =  asin((float)XaValue/accelMagnitude) * -RAD_TO_DEG_CONVERSION;
 	
 	pitchAngle += YgValue*(ESC_PULSE_PERIOD/1000000); // calculate travelled pitch and roll and add this to the pitch and roll angle variables.
 	rollAngle +=  XgValue*(ESC_PULSE_PERIOD/1000000); // ESC_PULSE_PERIOD is devided by 10^6 to convert it from microseconds to seconds
@@ -119,8 +129,9 @@ void IMU::calculateAngleDeviations() {
   	 
 }
 
-float* IMU::getAngleAdjustments() {
-	
-	float angleAdjustments[2] = {rollAngle, pitchAngle};
-	return angleAdjustments;
+void IMU::getAngleAdjustments(float* angleAdjustments) {
+
+  calculateAngleDeviations();
+	angleAdjustments[ROLL_VALUE] = rollAngle;
+	angleAdjustments[PITCH_VALUE] = pitchAngle;
 }

@@ -115,13 +115,16 @@
 #define ESC_MOTORS_ON_PULSE 1200
 #define ESC_MOTORS_OFF_PULSE 1000
 #define ESC_PULSE_PERIOD 4000
-#define ALL_ESC_ENABLED
-#define ALL_ESC_DISABLE 
+#define ALL_ESC_ENABLED 0x0F
+#define ALL_ESC_DISABLED 0x00
 #define ESC_CENTER_VALUE 1500
 
 // defining battery level constants
 #define MAX_BATTERY_VOLTAGE 1240
 #define MIN_BATTERY_VOLTAGE 800
+
+//radians to degrees conversion
+#define RAD_TO_DEG_CONVERSION 57.2958
 
 #include <stdint.h>
 

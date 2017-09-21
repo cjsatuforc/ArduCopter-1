@@ -3,6 +3,7 @@
 
 int convertRecieverInput(int channel);
 void calibrateRC();
-
+bool checkForStartCond();
+bool checkForStopCond();
 
 #endif // RCCONTROL_H_

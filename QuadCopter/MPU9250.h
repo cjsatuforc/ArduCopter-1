@@ -28,13 +28,13 @@ public:
 
 IMU(uint8_t slave_addr);
 
-float* getAngleAdjustments();
-void IMUInit(uint8_t* reg_addrs, uint8_t* initialValues);
+void getAngleAdjustments(float* angleAdjustments);
+void IMUInit(const uint8_t* reg_addrs, const uint8_t* initialValues);
 void readAccelData(uint8_t reg_start_addr);
 void readGyroData(uint8_t reg_start_addr);
 void writeIMUData(uint8_t reg_addr, int value);
-int* getGyroValues(int* gyroValues);
-int* getAccelValues(int* accelValues);
+void getGyroValues(int* gyroValues);
+void getAccelValues(int* accelValues);
 void calibrateIMU(uint8_t gyroOffsetStartAddress, uint8_t accelOffsetStartAddress);
 };
 

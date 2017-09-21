@@ -44,7 +44,7 @@ void calibrateRC() {
   } while (sticksCentered < STICKS_CENTERED_LIMIT);
 }
 
-int convertReceiverInput(int channel) {
+int convertRecieverInput(int channel) {
   //First we declare some local variables
   int actual, difference;
 
@@ -62,6 +62,24 @@ int convertReceiverInput(int channel) {
   return ESC_CENTER_VALUE;
 }
 
+bool checkForStartCond() {
+  
+    uint8_t start = 0;
+  //For starting the motors: throttle low and yaw left (step 1).
+    if(receiverInput[THROTTLE_CHANNEL-1] < 1050 && receiverInput[YAW_CHANNEL-1] < 1050)start = 1;
+  //When yaw stick is back in the center position start the motors (step 2).
+  if(start == 1 && receiverInput[THROTTLE_CHANNEL-1] < 1050 && receiverInput[YAW_CHANNEL-1] > 1450)
+    return true;
+
+  return false;
+ }
+
+bool checkForStopCond() {
+ if(receiverInput[THROTTLE_CHANNEL-1] < 1050 && receiverInput[YAW_CHANNEL-1] > 1950)
+    return true;
+
+ return false;
+}
 ISR(PCINT0_vect) {
   static long timer_1, timer_2, timer_3, timer_4, current_time;
   static unsigned char last_channel_1, last_channel_2, last_channel_3, last_channel_4;
