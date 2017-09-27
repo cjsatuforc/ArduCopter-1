@@ -1,7 +1,9 @@
 #ifndef ESC_H_
 #define ESC_H_
 
-void calculateEscPulses(int& throttleValue, int batteryVoltage, float pidRoll, float pidPitch, float pidYaw);
+#include "Common.h"
+
+void calculateEscPulses(int batteryVoltage, float pidRoll, float pidPitch, float pidYaw);
 const int* getEscPulses();
 void disableESCs();
 void setEscValues(int (&escValues)[NUM_ESC]);

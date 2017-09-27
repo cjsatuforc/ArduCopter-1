@@ -74,8 +74,8 @@ void setPIDValues(const float* pValues, const float* iValues, const float* dValu
 
   for(int i = 0; i < 3; i++) {
 
-    pidValues[i][0] = pValues[i];
-    pidValues[i][1] = iValues[i];
-    pidValues[i][2] = dValues[i];
+    pidValues[i][PROP_VALUE] = pValues[i];
+    pidValues[i][INTEGRAL_VALUE] = iValues[i];
+    pidValues[i][DERIVATIVE_VALUE] = dValues[i];
   }
 }

@@ -4,6 +4,17 @@
  #include "ESC.h"
  #include <Wire.h>
 
+ #define PID_P_ROLL       1.0
+ #define PID_P_PITCH      1.0
+ #define PID_P_YAW        1.0
+ 
+ #define PID_D_ROLL       1.0
+ #define PID_D_PITCH      1.0
+ #define PID_D_YAW        1.0
+ 
+ #define PID_I_ROLL       1.0
+ #define PID_I_PITCH      1.0
+ #define PID_I_YAW        1.0
  
   // Declare the IMU variable:
   IMU imu(IMU_SLAVE_ADDRESS);
@@ -32,6 +43,15 @@
   
   //The variable battery_voltage holds 1050 if the battery voltage is 10.5V. (TODO: REMOVE MAGIC NUMBERS)
   batteryVoltage = (analogRead(0) + 65) * 1.2317; 
+
+  //set the pid coefficients
+
+  float pValues[3] {PID_P_ROLL, PID_P_PITCH, PID_P_YAW};
+  float iValues[3] {PID_I_ROLL, PID_I_PITCH, PID_I_YAW};
+  float dValues[3] {PID_D_ROLL, PID_D_PITCH, PID_D_YAW};
+  setPIDValues(pValues, iValues, dValues);
+
+  //start the program loop timer
   loopTimer = micros();
 
   digitalWrite(12, LOW); //indicate that startup has completed

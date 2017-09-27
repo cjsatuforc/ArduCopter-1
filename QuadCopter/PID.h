@@ -11,7 +11,7 @@
 #include "MPU9250.h"
 
 void calculatePIDOutput(float& pidRoll, float& pidPitch, float& pidYaw, IMU& gyro);
-void setPIDValues(float* pValues, float* iValues, float* dValues);
+void setPIDValues(const float* pValues, const float* iValues, const float* dValues);
 
 #endif /* PID_H_ */
 
