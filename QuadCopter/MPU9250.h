@@ -16,6 +16,7 @@ class IMU {
 
 int XaValue, YaValue, ZaValue;
 int XgValue, YgValue, ZgValue;
+int lastXg, lastYg, lastZg;
 uint8_t slaveAddress;
 float pitchAngle, rollAngle, yawAngle;
 float gyroMagnitude, accelMagnitude;

@@ -24,19 +24,21 @@ void calculatePIDOutput(float& pidRoll, float& pidPitch, float& pidYaw, IMU& gyr
   pidITotal[ROLL_VALUE] += (pidValues[ROLL_VALUE][INTEGRAL_VALUE] * rollError);
 
   pidRoll = (pidValues[ROLL_VALUE][PROP_VALUE] * rollError) + pidITotal[ROLL_VALUE] + (pidValues[ROLL_VALUE][DERIVATIVE_VALUE] * (rollError - lastRollError));
+  lastRollError = rollError;
 
   //-------------------------------------------------Pitch Calculations-----------------------------------------------------------------------------------
   int pitchError = gyroValues[PITCH_VALUE] - pidSetPoints[PITCH_VALUE];
   pidITotal[PITCH_VALUE] += (pidValues[PITCH_VALUE][INTEGRAL_VALUE] * pitchError);
 
   pidPitch = (pidValues[PITCH_VALUE][PROP_VALUE] * rollError) + pidITotal[PITCH_VALUE] + (pidValues[PITCH_VALUE][DERIVATIVE_VALUE] * (pitchError - lastPitchError));
-
+  lastPitchError = pitchError;
 
   //-------------------------------------------------Yaw Calculations-------------------------------------------------------------------------------------
   int yawError = gyroValues[YAW_VALUE] - pidSetPoints[YAW_VALUE];
   pidITotal[2] += (pidValues[YAW_VALUE][INTEGRAL_VALUE] * yawError);
 
   pidYaw = (pidValues[YAW_VALUE][PROP_VALUE] * yawError) + pidITotal[YAW_VALUE] + (pidValues[YAW_VALUE][DERIVATIVE_VALUE] * (yawError - lastYawError));
+  lastYawError = yawError;
 }
 
 // calculate PID set points using the receiver input and the angle correction from the imu. returns an array of set points.

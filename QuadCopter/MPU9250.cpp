@@ -12,6 +12,9 @@ IMU::IMU(uint8_t slave_addr) {
   XgValue = 0;
   YgValue = 0;
   ZgValue = 0;
+  lastXg = 0;
+  lastYg = 0;
+  lastZg = 0;
   slaveAddress = slave_addr;
 }
 
@@ -54,9 +57,14 @@ void IMU::writeIMUData(uint8_t reg_addr, int value) {
 // getting acceleromter and gyro values from IMU
 void IMU::getGyroValues(int* gyroValues) {
 
-  gyroValues[ROLL_VALUE] = XgValue;
-  gyroValues[PITCH_VALUE] = YgValue;
-  gyroValues[YAW_VALUE] = ZgValue;
+	// filter out high frequency changes
+  gyroValues[ROLL_VALUE] =  (lastXg * 0.7) + (XgValue * 0.3);
+  gyroValues[PITCH_VALUE] = (lastYg * 0.7) + (YgValue * 0.3);
+  gyroValues[YAW_VALUE] = (ZastYg * 0.7) + (ZgValue * 0.3);
+  
+  lastXg = XgValue;
+  lastYg = YgValue;
+  lastZg = ZgValue;
 }
 void IMU::getAccelValues(int* accelValues) {
 
@@ -122,11 +130,17 @@ void IMU::calculateAngleDeviations() {
 	pitchAngle-= rollAngle* sin(ZgValue * (PI/180) * ESC_PULSE_PERIOD/1000000); //If the IMU has yawed transfer the roll angle to the pitch angle.
 	rollAngle+= pitchAngle* sin(ZgValue * (PI/180) * ESC_PULSE_PERIOD/1000000); //If the IMU has yawed transfer the pitch angle to the roll angle
 	
+	
 	// perform gyro drift correction by using a complimetary filter 
 	
 	pitchAngle = pitchAngle*0.9996 + accelAnglePitch*0.0004;  
   	rollAngle = rollAngle*0.9996 + accelAngleRoll*0.0004; 
   	 
+  	 //perform autolevel 
+	
+	pitchAngle *= 15;
+	rollAngle *= 15;
+	
 }
 
 void IMU::getAngleAdjustments(float* angleAdjustments) {
